@@ -1,44 +1,44 @@
-
-describe("Cell", function() {
-  it("should return 0 as the count of living neighbours", function() {
-    var cell = new Cell(1,1);
-    expect(cell.calculateLivingNeighbours()).toEqual(0);
-  });
-  
-  it("should return 1 as the count of living neighbours", function() {
-    var cell = new Cell(1,1);
-    var other = new Cell(1,2);
-    other.state = CellState.alive;
-    cell.addNeighbour(other);
-    expect(cell.calculateLivingNeighbours()).toEqual(1);
-  });
-});
-
 describe("Board", function() {
-  it("should return 0 as the count of living neighbours", function() {
-    var cell = new Cell(1,1);
-    expect(cell.calculateLivingNeighbours()).toEqual(0);
-  });
-});
+   it("should have 9 cells if it is initialized with x=3 and y=3", function(){
+       var board = new Board();
+       board.init(3, 3);
+       expect(board.cells.length).toEqual(3);
+       expect(board.cells[0].length).toEqual(3);
+   });
 
-describe("Rules", function() {
-  it("should die if less than 2 alive neighbours", function() {
-    var cell = new Cell(1,1);
-    cell.state = CellState.alive;
-    var aliveCell = new Cell(1,2);
-    aliveCell.state = CellState.alive;
-    cell.addNeighbour(aliveCell);
-    expect(calculateState(cell)).toEqual(CellState.dead);
-  });
-  it("should live if 2 or three alive neighbours", function() {
-    var cell = new Cell(1,1);
-    cell.state = CellState.alive;
-    var aliveCell = new Cell(1,2);
-    aliveCell.state = CellState.alive;  
-    var aliveCell2 = new Cell(1,3);
-    aliveCell2.state = CellState.alive;
-    cell.addNeighbour(aliveCell);
-    cell.addNeighbour(aliveCell2);
-    expect(calculateState(cell)).toEqual(CellState.alive);
-  });
+    it("should have 25 cells if it is initialized with x=5 and y=5", function(){
+        var board = new Board();
+        board.init(5, 5);
+        expect(board.cells.length).toEqual(5);
+        expect(board.cells[0].length).toEqual(5);
+    });
+
+    it("calc neighbours", function() {
+       var board = new Board();
+        board.init(3,3);
+        board.calculateNeighbours();
+        expect(board.cells[0][0].neighbours.length).toEqual(3);
+    });
+
+    it("calc next step", function() {
+        var board = new Board();
+        board.init(3,3);
+        board.cells[1][0].state = Cellstate.alive;
+        board.cells[1][1].state = Cellstate.alive;
+        board.cells[0][1].state = Cellstate.alive;
+        board.calculateNeighbours();
+        board.nextStep();
+        expect(board.cells[0][0].nextState).toEqual(Cellstate.alive);
+    });
+
+    it("calc next step, one dies", function() {
+        var board = new Board();
+        board.init(3,3);
+        board.cells[1][0].state = Cellstate.alive;
+        board.cells[1][1].state = Cellstate.alive;
+        board.cells[0][1].state = Cellstate.alive;
+        board.calculateNeighbours();
+        board.nextStep();
+        expect(board.cells[1][0].nextState).toEqual(Cellstate.dead);
+    });
 });
