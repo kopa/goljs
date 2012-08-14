@@ -1,86 +1,37 @@
-Cellstate = {dead:0, alive:1};
+(function () {
 
-Cell = function () {
-    this.state = Cellstate.dead;
-    this.nextState;
-    this.neighbours = [];
+    var lonely = function (alive) {
+        return Cellstate.dead;
+    };
+    var normal = function (alive) {
+        return alive;
+    };
+    var optimal = function (alive) {
+        return Cellstate.alive;
+    };
+    var crowded = function (alive) {
+        return Cellstate.dead;
+    };
 
-}
+    window.lonely = lonely;
+    window.normal = normal;
+    window.optimal = optimal;
+    window.crowded = crowded;
 
-Cell.prototype.addNeighbour = function (neighbour) {
-    this.neighbours.push(neighbour);
-}
-
-Cell.prototype.calculateNeighbours = function () {
-    var count = 0;
-    for (var i = 0; i < this.neighbours.length; i++) {
-        if (this.neighbours[i].state === Cellstate.alive) {
-            count++;
+    var Rules = {};
+    Rules.neighbourhood = function (neighbours) {
+        if (neighbours == 2) {
+            return normal;
         }
-    }
-    return count;
-}
-
-Board = function() {
-    this.xSize;
-    this.ySize;
-    this.cells = [];
-}
-
-Board.prototype.init = function(xSize, ySize) {
-    this.xSize = xSize;
-    this.ySize = ySize;
-    for (var x = 0; x < xSize; x++) {
-        this.cells.push([]);
-        for (var y = 0; y < ySize; y++) {
-            this.cells[x][y] = new Cell();
+        if (neighbours == 3) {
+            return optimal;
         }
-    }
-}
-
-Board.prototype.calculateNeighbours = function() {
-    for (var x = 0; x < this.xSize; x++) {
-        for (var y = 0; y < this.ySize; y++) {
-            var cell = this.cells[x][y];
-            if (x > 0) {
-                cell.addNeighbour(this.cells[x - 1][y]);
-            }
-            if (x < this.xSize - 1) {
-                cell.addNeighbour(this.cells[x + 1][y]);
-            }
-            if (y > 0) {
-                cell.addNeighbour(this.cells[x][y - 1]);
-            }
-            if (y < this.ySize - 1) {
-                cell.addNeighbour(this.cells[x][y + 1]);
-            }
-            if (x > 0 && y > 0) {
-                cell.addNeighbour(this.cells[x - 1][y - 1]);
-            }
-            if (x < this.xSize - 1 && y > 0) {
-                cell.addNeighbour(this.cells[x + 1][y - 1]);
-            }
-            if (x > 0 && y < this.ySize - 1) {
-                cell.addNeighbour(this.cells[x - 1][y + 1]);
-            }
-            if (x < this.xSize - 1 && y < this.ySize - 1) {
-                cell.addNeighbour(this.cells[x + 1][y + 1]);
-            }
+        if (neighbours > 3) {
+            return crowded;
         }
-    }
-}
 
-Board.prototype.nextStep = function() {
-    for (var x = 0; x < this.xSize; x++) {
-        for (var y = 0; y < this.ySize; y++) {
-            var cell = this.cells[x][y];
+        return lonely;
+    };
+    window.Rules = Rules;
 
-            if (cell.state === Cellstate.dead && cell.calculateNeighbours() === 3) {
-                cell.nextState = Cellstate.alive;
-            }
-            if (cell.state === Cellstate.alive && cell.calculateNeighbours() < 2) {
-                cell.nextState = Cellstate.dead;
-            }
-        }
-    }
-}
+}());
