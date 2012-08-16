@@ -1,31 +1,59 @@
-(function () {
+var gol = angular.module("GameOfLife", []);
 
-    var GameOfLife, XSIZE, YSIZE, board;
+gol.controller('GameController', function GameController($scope, $timeout) {
+    var board;
 
-    XSIZE = 10;
-    YSIZE = 10;
+    $scope.newGame = function () {
+        board = $scope.board = new Board($scope.boardSize);
+    };
 
-    function initializeGame() {
-        console.log("init gol");
-        board = new Board(XSIZE, YSIZE);
-        board.initNeighbours();
+    $scope.nextStep = function () {
+        board.nextStep();
+    };
 
-        var intervalId = setInterval(tick, 1000);
+    $scope.playing = false;
 
-        function tick() {
-            if (board.isTicking()) {
-                console.log("tick");
-                board.nextStep();
-            } else {
-                clearInterval(intervalId);
-                console.log("end state");
+    $scope.play = function () {
+        $scope.playing = true;
+    };
+
+    $scope.stop = function () {
+        $scope.playing = false;
+    };
+
+    $scope.$watch("playing", function () {
+        var tick = function () {
+            if ($scope.playing && $scope.board.nextStepAvailable) {
+                $scope.nextStep();
+                if ($scope.playing) {
+                    return $timeout(tick, 500);
+                }
             }
+        };
+        return tick();
+    });
+
+    $scope.toggle = function (cell) {
+        if (cell.state === Cellstate.alive) {
+            cell.state = Cellstate.dead;
+        } else {
+            cell.state = Cellstate.alive;
         }
+        board.nextStepAvailable = true;
+        $scope.playing = false;
+    };
+
+    $scope.cellClass = function (cell) {
+        if (cell.state === Cellstate.alive) {
+            return "alive";
+        } else {
+            return "dead";
+        }
+    };
+
+    $scope.boardSize = 10;
+
+    $scope.newGame();
+});
 
 
-    }
-
-    initializeGame();
-
-
-}());

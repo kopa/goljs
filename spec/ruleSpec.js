@@ -21,19 +21,19 @@ describe("Rules", function() {
 describe("Neighbourhoods",function(){
 
     it("should return a lonely neighbourhoood for 1 neighbours", function(){
-        expect(Rules.neighbourhood(1)).toEqual(lonely);
+        expect(Rules.getStateCalculator(1)).toEqual(lonely);
     });
 
     it("should return a normal neighbourhoood for 2 neighbours", function(){
-        expect(Rules.neighbourhood(2)).toEqual(normal);
+        expect(Rules.getStateCalculator(2)).toEqual(normal);
     });
 
     it("should return a optimal neighbourhoood for 3 neighbours", function(){
-        expect(Rules.neighbourhood(3)).toEqual(optimal);
+        expect(Rules.getStateCalculator(3)).toEqual(optimal);
     });
 
     it("should return a crowded neighbourhoood for 4 neighbours", function(){
-        expect(Rules.neighbourhood(4)).toEqual(crowded);
+        expect(Rules.getStateCalculator(4)).toEqual(crowded);
     });
 
 });
