@@ -13,7 +13,7 @@
     </div>
     <div class="controls">Size: <input type="number" ng-model="boardSize"/>
         <button ng-click="newGame()">New Board</button>
-        <button ng-click="nextStep()" ng-disabled="!board.nextStepAvailable">Next Step</button>
+        <button ng-click="nextStep()" ng-disabled="!board.nextStepAvailable || playing">Next Step</button>
         <button ng-click="play()" ng-hide="playing" ng-disabled="!board.nextStepAvailable">Play</button>
         <button ng-click="stop()" ng-show="playing" ng-disabled="!board.nextStepAvailable">Stop</button>
     </div>
