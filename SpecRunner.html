@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="lib/jasmine-1.2.0/jasmine.css">
     <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine.js"></script>
     <script type="text/javascript" src="lib/jasmine-1.2.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="lib/phantomjs-jasmine/console-runner.js"></script>
 
     <!-- include spec files here... -->
     <script type="text/javascript" src="spec/cellSpec.js"></script>
@@ -27,6 +28,8 @@
             var htmlReporter = new jasmine.HtmlReporter();
 
             jasmineEnv.addReporter(htmlReporter);
+            jasmineEnv.addReporter(new jasmine.TrivialReporter());
+            jasmineEnv.addReporter(new jasmine.ConsoleReporter());
 
             jasmineEnv.specFilter = function (spec) {
                 return htmlReporter.specFilter(spec);
