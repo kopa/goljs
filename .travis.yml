@@ -1,1 +1,1 @@
-script: phantomjs testrunner.js
+script: phantomjs lib/run-jasmine.js SpecRunner.html
